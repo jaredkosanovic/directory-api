@@ -24,6 +24,13 @@ class DirectoryEntityResource extends Resource {
     private final DirectoryEntityDAO directoryEntityDAO
     private final String RESOURCETYPE = "directory"
 
+    // TODO: Move to skeleton or configuration file
+    public static final Integer DEFAULT_PAGE_NUMBER = 1
+    public static final Integer DEFAULT_PAGE_SIZE = 10
+
+    @Context
+    UriInfo uriinfo
+
     /**
      * Constructs the object after receiving and storing directoryEntityDAO instance.
      *
