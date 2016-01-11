@@ -113,4 +113,42 @@ class DirectoryEntityResource extends Resource {
         }
         responseBuilder.build()
     }
+
+    // Pagination
+    public static String getArrayParameter(String key, String index, MultivaluedMap<String, String> queryParameters) {
+        for (Map.Entry<String, List<String>> entry : queryParameters.entrySet()) {
+            if (!entry.key.contains("[") && !entry.key.contains("]")) {
+                continue
+            }
+
+            int a = entry.key.indexOf('[')
+            int b = entry.key.indexOf(']')
+
+            if (entry.key.substring(0, a).equals(key)) {
+                if (entry.key.substring(a + 1, b).equals(index)) {
+                    return entry.value.get(0)
+                }
+            }
+        }
+
+        null
+    }
+
+    private Integer getPageNumber() {
+        def pageNumber = getArrayParameter("page", "number", uriinfo.getQueryParameters())
+        if (!pageNumber || !pageNumber.isInteger()) {
+            return DEFAULT_PAGE_NUMBER
+        }
+
+        pageNumber.toInteger()
+    }
+
+    private Integer getPageSize() {
+        def pageSize = getArrayParameter("page", "size", uriinfo.getQueryParameters())
+        if (!pageSize || !pageSize.isInteger()) {
+            return DEFAULT_PAGE_SIZE
+        }
+
+        pageSize.toInteger()
+    }
 }
