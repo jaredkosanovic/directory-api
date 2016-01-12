@@ -115,7 +115,14 @@ class DirectoryEntityResource extends Resource {
         responseBuilder.build()
     }
 
-    // Pagination
+    /**
+     * Add pagination links to data search results.
+     *
+     * @param topLevelHits      First "hits"
+     * @param q
+     * @param type
+     * @param resultObject
+     */
     private void setPaginationLinks(JsonNode topLevelHits, String q, String type, ResultObject resultObject) {
         def totalHits = topLevelHits.get("total").asInt()
 
@@ -149,6 +156,12 @@ class DirectoryEntityResource extends Resource {
         }
     }
 
+    /**
+     * Returns string url for use in pagination links.
+     *
+     * @param params
+     * @return
+     */
     private String getPaginationUrl(def params) {
         def uriAndPath = uriinfo.getBaseUri().toString() + uriinfo.getPath()
         def nonNullParams = params.clone()
@@ -161,6 +174,14 @@ class DirectoryEntityResource extends Resource {
         uriAndPath + "?" + nonNullParams.join('&')
     }
 
+    /**
+     * Returns value for an array parameter in GET string.
+     *
+     * @param key
+     * @param index
+     * @param queryParameters
+     * @return
+     */
     public static String getArrayParameter(String key, String index, MultivaluedMap<String, String> queryParameters) {
         for (Map.Entry<String, List<String>> entry : queryParameters.entrySet()) {
             if (!entry.key.contains("[") && !entry.key.contains("]")) {
@@ -180,6 +201,11 @@ class DirectoryEntityResource extends Resource {
         null
     }
 
+    /**
+     * Returns page number used by pagination.
+     *
+     * @return
+     */
     private Integer getPageNumber() {
         def pageNumber = getArrayParameter("page", "number", uriinfo.getQueryParameters())
         if (!pageNumber || !pageNumber.isInteger()) {
@@ -189,6 +215,11 @@ class DirectoryEntityResource extends Resource {
         pageNumber.toInteger()
     }
 
+    /**
+     * Returns the page size used by pagination.
+     *
+     * @return
+     */
     private Integer getPageSize() {
         def pageSize = getArrayParameter("page", "size", uriinfo.getQueryParameters())
         if (!pageSize || !pageSize.isInteger()) {
