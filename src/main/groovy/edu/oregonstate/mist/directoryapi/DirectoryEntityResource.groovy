@@ -116,6 +116,40 @@ class DirectoryEntityResource extends Resource {
     }
 
     // Pagination
+    private void setPaginationLinks(JsonNode topLevelHits, String q, String type, ResultObject resultObject) {
+        def totalHits = topLevelHits.get("total").asInt()
+
+        if (!totalHits) {
+            return
+        }
+
+        Integer pageNumber = getPageNumber()
+        Integer pageSize = getPageSize()
+        def map = ["q": q, "type": type, "pageSize": pageSize, "pageNumber": pageNumber]
+        int lastPage = Math.ceil(totalHits / pageSize)
+
+        resultObject.links["self"] = getPaginationUrl(map)
+        map.pageNumber = 1
+        resultObject.links["first"] = getPaginationUrl(map)
+        map.pageNumber = lastPage
+        resultObject.links["last"] = getPaginationUrl(map)
+
+        if (pageNumber > DEFAULT_PAGE_NUMBER) {
+            map.pageNumber = pageNumber - 1
+            resultObject.links["prev"] = getPaginationUrl(map)
+        } else {
+            resultObject.links["prev"] = null
+        }
+
+        if (totalHits > (pageNumber * pageSize)) {
+            map.pageNumber = pageNumber + 1
+            resultObject.links["next"] = getPaginationUrl(map)
+        } else {
+            resultObject.links["next"] = null
+        }
+    }
+
+
     public static String getArrayParameter(String key, String index, MultivaluedMap<String, String> queryParameters) {
         for (Map.Entry<String, List<String>> entry : queryParameters.entrySet()) {
             if (!entry.key.contains("[") && !entry.key.contains("]")) {
