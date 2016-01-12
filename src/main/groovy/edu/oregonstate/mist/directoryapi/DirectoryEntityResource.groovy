@@ -149,6 +149,17 @@ class DirectoryEntityResource extends Resource {
         }
     }
 
+    private String getPaginationUrl(def params) {
+        def uriAndPath = uriinfo.getBaseUri().toString() + uriinfo.getPath()
+        def nonNullParams = params.clone()
+        nonNullParams["page[number]"] = nonNullParams['pageNumber']
+        nonNullParams["page[size]"] = nonNullParams['pageSize']
+        nonNullParams.remove('pageSize')
+        nonNullParams.remove('pageNumber')
+
+        nonNullParams = nonNullParams.findAll() { it.value } .collect { k, v -> "$k=$v"}
+        uriAndPath + "?" + nonNullParams.join('&')
+    }
 
     public static String getArrayParameter(String key, String index, MultivaluedMap<String, String> queryParameters) {
         for (Map.Entry<String, List<String>> entry : queryParameters.entrySet()) {
