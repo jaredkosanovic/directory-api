@@ -1,6 +1,5 @@
 package edu.oregonstate.mist.directoryapi
 
-import com.fasterxml.jackson.databind.JsonNode
 import edu.oregonstate.mist.api.Resource
 import edu.oregonstate.mist.api.AuthenticatedUser
 import io.dropwizard.auth.Auth
