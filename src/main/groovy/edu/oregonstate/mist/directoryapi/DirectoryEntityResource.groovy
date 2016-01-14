@@ -122,17 +122,16 @@ class DirectoryEntityResource extends Resource {
      * @param type
      * @param resultObject
      */
-    private void setPaginationLinks(JsonNode topLevelHits, String q, String type, ResultObject resultObject) {
-        def totalHits = topLevelHits.get("total").asInt()
+    private void setPaginationLinks(Integer topLevelHits, String q, String type, ResultObject resultObject) {
 
-        if (!totalHits) {
+        if (!topLevelHits) {
             return
         }
 
         Integer pageNumber = getPageNumber()
         Integer pageSize = getPageSize()
         def map = ["q": q, "type": type, "pageSize": pageSize, "pageNumber": pageNumber]
-        int lastPage = Math.ceil(totalHits / pageSize)
+        int lastPage = Math.ceil(topLevelHits / pageSize)
 
         resultObject.links["self"] = getPaginationUrl(map)
         map.pageNumber = 1
@@ -147,7 +146,7 @@ class DirectoryEntityResource extends Resource {
             resultObject.links["prev"] = null
         }
 
-        if (totalHits > (pageNumber * pageSize)) {
+        if (topLevelHits > (pageNumber * pageSize)) {
             map.pageNumber = pageNumber + 1
             resultObject.links["next"] = getPaginationUrl(map)
         } else {
