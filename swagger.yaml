@@ -54,6 +54,11 @@ paths:
           description: Not found
           schema:
             $ref: "#/definitions/Error"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/fault"
+            
       security:
         - directory_api_key: []
   /directory/{osuuid}:
@@ -82,6 +87,10 @@ paths:
           description: Not found
           schema:
             $ref: "#/definitions/Error"
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/fault"
       security:
         - directory_api_key: []
 securityDefinitions:
@@ -162,3 +171,18 @@ definitions:
       details:
         type: string
         description: A link to further information about the error.
+  
+  Detail:
+    type: object
+    properties:
+      errorcode:
+        type: string
+        description: OAuth V2 Error Code
+        
+  fault:
+    type: object
+    properties:
+      faultstring:
+        type: string
+      Detail:
+        $ref: "#/definitions/Detail"
