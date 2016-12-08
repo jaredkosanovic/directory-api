@@ -54,10 +54,14 @@ paths:
           description: Not found
           schema:
             $ref: "#/definitions/Error"
+        "403":
+          description: "Invalid Access Token"
+          schema:
+            $ref: "#/definitions/fault"
         "500":
           description: Internal Server Error
           schema:
-            $ref: "#/definitions/fault"
+            $ref: "#/definitions/Error"
             
       security:
         - directory_api_key: []
@@ -87,10 +91,14 @@ paths:
           description: Not found
           schema:
             $ref: "#/definitions/Error"
+        "403":
+          description: "Invalid Access Token"
+          schema:
+            $ref: "#/definitions/fault"
         "500":
           description: Internal Server Error
           schema:
-            $ref: "#/definitions/fault"
+            $ref: "#/definitions/Error"
       security:
         - directory_api_key: []
 securityDefinitions:
