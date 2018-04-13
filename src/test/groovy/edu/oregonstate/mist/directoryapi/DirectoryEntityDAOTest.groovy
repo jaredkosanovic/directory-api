@@ -10,7 +10,7 @@ import org.junit.BeforeClass
 import static org.junit.Assert.*
 
 class DirectoryEntityDAOTest {
-    private static DirectoryEntityDAO directoryEntityDAO
+    private static final directoryEntityDAO = new DirectoryEntityDAO()
     private static final Long goodOSUUID = 51646559347
     private static final Long badOSUUID = 0
     private static final String goodUID = 'browtayl'
@@ -21,19 +21,8 @@ class DirectoryEntityDAOTest {
     private static final String goodFirstName = 'Taylor'
     private static final String goodLastName = 'Brown'
 
-    @ClassRule
-    public static final DropwizardAppRule<DirectoryApplicationConfiguration> APPLICATION =
-            new DropwizardAppRule<DirectoryApplicationConfiguration>(
-                    DirectoryApplication.class,
-                    new File("configuration.yaml").absolutePath)
 
-    @BeforeClass
-    public static void setUpClass() {
-        directoryEntityDAO = new DirectoryEntityDAO(
-                APPLICATION.configuration.getLdapConfiguration()
-        )
-    }
-
+    /*
     @Test
     public void testGetByOSUUID() {
         assertNotNull(directoryEntityDAO.getByOSUUID(goodOSUUID))
@@ -92,5 +81,17 @@ class DirectoryEntityDAOTest {
                 fail()
             }
         }
+    }
+    */
+
+    @Test
+    public void testSanitize() {
+        assert directoryEntityDAO.sanitize(goodUID + "(").trim() == goodUID
+        assert directoryEntityDAO.sanitize(goodUID + ")").trim() == goodUID
+        assert directoryEntityDAO.sanitize(goodUID + "*").trim() == goodUID
+        assert directoryEntityDAO.sanitize(goodUID + "&").trim() == goodUID
+        assert directoryEntityDAO.sanitize(goodUID + "#").trim() == goodUID
+        assert directoryEntityDAO.sanitize("#" + goodUID).trim() == goodUID
+        assert directoryEntityDAO.sanitize(goodUnicodeSearchTerm) == goodUnicodeSearchTerm
     }
 }

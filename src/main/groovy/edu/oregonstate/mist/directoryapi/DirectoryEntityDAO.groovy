@@ -37,6 +37,10 @@ class DirectoryEntityDAO {
     private static final Pattern spacesPattern = Pattern.compile(' +')
     private static final Pattern dollarSignPattern = Pattern.compile('\\$')
 
+    /** Constructs a directory entity data access object with no LDAP configuration (for unit testing).
+     */
+    public DirectoryEntityDAO() { }
+
     /**
      * Constructs the directory entity data access object with given LDAP configuration.
      *
